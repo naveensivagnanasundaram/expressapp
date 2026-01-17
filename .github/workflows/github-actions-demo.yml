@@ -3,7 +3,7 @@ name: Express App CI/CD
 on:
   push:
     branches:
-      - main   # change if you use another branch
+      - main  # change if you use another branch
 
 jobs:
   deploy:
@@ -21,8 +21,20 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
+            # Load NVM so npm and pm2 are available
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use default  # or a specific version like nvm use 20
+
+            # Go to your app directory
             cd ~/backends/expressapp
+
+            # Pull latest code
             git pull origin main
+
+            # Install dependencies
             npm install
+
+            # Restart app with PM2 (or start if not running)
             pm2 restart index || pm2 start index.js --name index
             pm2 save
