@@ -9,7 +9,7 @@ app.use(express.json());
 let customers = [
   {
     id: 1,
-    name: "John Doe",
+    name: "naveen",
     email: "john@example.com",
     city: "New York"
   },
